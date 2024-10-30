@@ -1,4 +1,6 @@
 // src/themes/theme.ts
+import { StyleSheet } from "react-native";
+
 export const theme = {
     colors: {
       background: '#ffffff',
@@ -29,3 +31,25 @@ export const theme = {
     },
   };
   
+export const styles = StyleSheet.create({
+    ballContainer: {
+      flexDirection: "row",
+    },
+    container:{
+      flex: 1,
+      justifyContent: 'center',  
+      alignItems: 'center',      
+    },
+    ball: {
+        borderRadius: 25,
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: theme.spacing.small,
+      },
+      number: {
+        fontSize: theme.fontSizes.text,
+        fontWeight: 'bold',
+      },
+})

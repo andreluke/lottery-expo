@@ -3,7 +3,7 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import { useLottery } from '../hooks/useContext';
 import Ball from '../components/Ball';
 import { theme } from '../theme';
-import styles from './_styles';
+import { styles } from '../theme';
 
 const QuinaScreen: React.FC = () => {
   const { results, loading } = useLottery();
