@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Ball Component Deve renderizar corretamente com suas props 1`] = `
+<View
+  style={
+    [
+      {
+        "alignItems": "center",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "margin": 4,
+        "width": 50,
+      },
+      {
+        "backgroundColor": "blue",
+        "margin": 10,
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      [
+        {
+          "fontSize": 16,
+          "fontWeight": "bold",
+        },
+        {
+          "color": "white",
+        },
+      ]
+    }
+  >
+    7
+  </Text>
+</View>
+`;
