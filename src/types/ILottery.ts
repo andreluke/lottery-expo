@@ -2,12 +2,12 @@
 export interface LotteryResult {
     nome: string;              
     numeroDoConcurso: number;   
-    dataDoConcurso: string;      
+    dataPorExtenso: string;      
     dezenas: number[];          
   }
   
   export interface LotteryResults {
-    megaSena: LotteryResult;
+    megasena: LotteryResult;
     quina: LotteryResult;
     timemania: LotteryResult;
   }

@@ -3,7 +3,7 @@ import { fetchLatestResults } from '../services/api';
 import { LotteryResults } from '../types/ILottery';
 
 interface LotteryContextData {
-  results: any;
+  results: LotteryResults | null;
   loading: boolean;
 }
 

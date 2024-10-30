@@ -8,8 +8,8 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   return (
-    <Drawer.Navigator initialRouteName="MegaSena">
-      <Drawer.Screen name="Mega-Sena" component={MegaSenaScreen} />
+    <Drawer.Navigator initialRouteName="Mega-sena">
+      <Drawer.Screen name="Mega-sena" component={MegaSenaScreen} />
       <Drawer.Screen name="Quina" component={QuinaScreen} />
       <Drawer.Screen name="Timemania" component={TimemaniaScreen} />
     </Drawer.Navigator>

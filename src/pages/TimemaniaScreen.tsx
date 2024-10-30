@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { useLottery } from '../hooks/useContext';
 import Ball from '../components/Ball';
-import { theme } from '../theme';
-import { styles } from '../theme';
+import { theme, styles } from '../theme';
+import { LotteryResult } from '../types/ILottery';
 
 const TimemaniaScreen: React.FC = () => {
   const { results, loading } = useLottery();
@@ -16,17 +16,17 @@ const TimemaniaScreen: React.FC = () => {
     return <Text style={{fontSize: theme.fontSizes.text}}>Carregando...</Text>;
   }
 
-  const timemaniaResults = results?.timemania;
+  const timemaniaResults:LotteryResult | undefined = results?.timemania;
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: theme.fontSizes.title, alignSelf: "center", marginBottom: theme.spacing.large, fontWeight: "bold"}}>TIMEMANIA</Text>
+       <Text style={styles.title}>TIMEMANIA</Text>
     <View style={styles.ballContainer}>
     {timemaniaResults?.dezenas.map((dezena: number) => (
         <Ball key={dezena} number={dezena} color={theme.colors.timemania.background} text={theme.colors.timemania.text} spacing={theme.spacing.small}/>
       ))}
     </View>
-    <Text style={{fontSize: theme.fontSizes.subtitle, color: "#5d5d5d", marginTop: theme.spacing.small}}> {timemaniaResults.dataPorExtenso}</Text>
+    <Text style={styles.subText}> {timemaniaResults?.dataPorExtenso}</Text>
     </View>
   );
 };
