@@ -4,6 +4,7 @@ import { LotteryProvider } from './src/contexts/LotteryContexts';
 import DrawerNavigator from './src/routes/DrawerNavigator';
 import { StatusBar } from 'expo-status-bar';
 import { theme } from './src/theme';
+import 'react-native-gesture-handler';
 
 const App: React.FC = () => {
   return (

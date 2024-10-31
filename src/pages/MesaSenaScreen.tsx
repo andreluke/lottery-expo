@@ -6,7 +6,7 @@ import { theme, styles } from '../theme';
 import { LotteryResult } from '../types/ILottery';
 
 const MegaSenaScreen: React.FC = () => {
-  const { results, loading } = useLottery();
+  const { results, loading, error } = useLottery();
 
 //   if (loading) {
 //     return <ActivityIndicator size="large" color={theme.colors.megaSena.background} />;
@@ -14,6 +14,10 @@ const MegaSenaScreen: React.FC = () => {
 
   if (loading) {
     return <Text style={{fontSize: theme.fontSizes.text}}>Carregando...</Text>;
+  }
+
+  if(error){
+    return <Text style={{fontSize: theme.fontSizes.text}}>Ocorreu um erro: {error}</Text>
   }
 
   const megaSenaResults:LotteryResult | undefined = results?.megasena;

@@ -1,9 +1,7 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 import QuinaScreen from '../../pages/QuinaScreen';
 import { useLottery } from '../../hooks/useContext';
-import { styles } from '../../theme';
-import { Text } from 'react-native';
 
 // Mock do hook useLottery
 jest.mock('../../hooks/useContext', () => ({
@@ -11,21 +9,38 @@ jest.mock('../../hooks/useContext', () => ({
 }));
 
 describe('QuinaScreen', () => {
-  it('deve exibir o estado de carregamento corretamente', () => {
+  it('Deve exibir o estado de carregamento corretamente', () => {
     // Mock para simular o estado de carregamento
     (useLottery as jest.Mock).mockReturnValue({
       results: null,
       loading: true,
     });
 
-    const tree = renderer.create(<QuinaScreen />).toJSON();
-    
+    const { toJSON } = render(<QuinaScreen />);
+
     // Verifica se o snapshot do estado de carregamento está correto
-    expect(tree).toMatchSnapshot();
+    expect(toJSON()).toMatchSnapshot();
+  });
+  
+
+  it('Deve exibir uma mensagem de erro quando ocorrer um erro ao buscar os resultados', () => {
+    // Mock para simular um erro na busca dos resultados
+    (useLottery as jest.Mock).mockReturnValue({
+      results: null,
+      loading: false,
+      error: 'Erro ao carregar os resultados',
+    });
+
+    const { getByText } = render(<QuinaScreen />);
+
+    // Verifica se a mensagem de erro é exibida
+    const errorMessage = getByText(/Erro ao carregar os resultados/i);
+
+    expect(errorMessage).toBeTruthy();
   });
 
-  it('deve exibir o título da Quina', () => {
-    // Mock para simular resultados de Mega-Sena com o estado de carregamento falso
+  it('Deve exibir o título da Quina', () => {
+    // Mock para simular resultados de Quina com o estado de carregamento falso
     (useLottery as jest.Mock).mockReturnValue({
       results: {
         quina: {
@@ -36,57 +51,47 @@ describe('QuinaScreen', () => {
       loading: false,
     });
 
-    const tree = renderer.create(<QuinaScreen />).toJSON();
-    
-    // Verifica se o snapshot do componente com resultados da Mega-Sena está correto
-    expect(tree).toMatchSnapshot();
+    const { getByText } = render(<QuinaScreen />);
+
+    // Verifica se o título está presente
+    expect(getByText('QUINA')).toBeTruthy(); // Altere para o título que você espera
   });
 
-  it('deve exibir os números corretos da loteria', () => {
-    // Mock para simular resultados da Mega-Sena
+  it('Deve exibir os números corretos da loteria', () => {
+    // Mock para simular resultados da Quina
     (useLottery as jest.Mock).mockReturnValue({
       results: {
         quina: {
-            dezenas: [8, 13, 52, 22, 11],
+          dezenas: [8, 13, 52, 22, 11],
           dataPorExtenso: '29 de Outubro de 2024',
         },
       },
       loading: false,
     });
 
-    const component = renderer.create(<QuinaScreen />);
-    const instance = component.root;
-
+    const { getAllByText } = render(<QuinaScreen />);
+    
     // Verifica se os números corretos são exibidos no componente
-    const ballNumbers = instance.findAllByType(Text).map((text) => text.props.children);
-    
-    expect(ballNumbers).toContain(8);
-    expect(ballNumbers).toContain(13);
-    expect(ballNumbers).toContain(52);
-    expect(ballNumbers).toContain(22);
-    expect(ballNumbers).toContain(11);
+    expect(getAllByText(/8|13|52|22|11/)).toHaveLength(5); // Verifica se todos os números são exibidos
   });
 
-  it('deve exibir a data correta do sorteio', () => {
-    // Mock para simular o retorno de resultados da Mega-Sena com data
+  it('Deve exibir a data correta do sorteio', () => {
+    // Mock para simular o retorno de resultados da Quina com data
     (useLottery as jest.Mock).mockReturnValue({
       results: {
         quina: {
-            dezenas: [8, 13, 52, 22, 11],
+          dezenas: [8, 13, 52, 22, 11],
           dataPorExtenso: '29 de Outubro de 2024',
         },
       },
       loading: false,
     });
 
-    const component = renderer.create(<QuinaScreen />);
-    const instance = component.root;
+    const { getByText } = render(<QuinaScreen />);
 
-    const dateTextArray = instance.findByProps({ style: styles.subText }).props.children;
-    
-    // Corrige o teste unindo os elementos do array em uma string e removendo espaços adicionais
-    const dateText = dateTextArray.join('').trim();
+    // Verifica se a data correta do sorteio está exibida
+    const dateText = getByText(/29 de Outubro de 2024/i); // Usando regex corretamente
 
-    expect(dateText).toBe('29 de Outubro de 2024');
+    expect(dateText).toBeTruthy();
   });
 });

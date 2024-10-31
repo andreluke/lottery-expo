@@ -5,6 +5,7 @@ import { LotteryResults } from '../types/ILottery';
 interface LotteryContextData {
   results: LotteryResults | null;
   loading: boolean;
+  error: string | null
 }
 
 interface LotteryProviderProps {
@@ -16,19 +17,25 @@ export const LotteryContext = createContext<LotteryContextData>({} as LotteryCon
 export const LotteryProvider: React.FC<LotteryProviderProps> = ({ children }) => {
   const [results, setResults] = useState<LotteryResults | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadResults = async () => {
-      setLoading(true);
-      const data = await fetchLatestResults();
-      setResults(data);
-      setLoading(false);
+        try {
+            const data = await fetchLatestResults();
+            setResults(data);
+        } catch (err) {
+            setError('Erro ao carregar resultados'); // Define o erro no estado
+        } finally {
+            setLoading(false);
+        }
     };
+
     loadResults();
-  }, []);
+}, []);
 
   return (
-    <LotteryContext.Provider value={{ results, loading }}>
+    <LotteryContext.Provider value={{ results, loading, error }}>
       {children}
     </LotteryContext.Provider>
   );
