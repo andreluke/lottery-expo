@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../routes"; // Verifique se esse caminho está correto
 import { StackNavigationProp } from "@react-navigation/stack";
-import { style } from "../theme";
+import { style, theme } from "../theme";
+import { StatusBar } from "expo-status-bar";
 
 type SplashScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 
@@ -17,6 +18,7 @@ const Home: React.FC = () => {
 
   return (
     <View style={style.container}>
+      <StatusBar style="dark" backgroundColor={theme.colors.menuBackground} />
       <Text style={style.title}>Bem-vindo ao App!</Text>
       <TouchableOpacity style={style.button} onPress={() => navigation.navigate("Main")}>
         <Text style={style.buttonText}>Iniciar</Text>

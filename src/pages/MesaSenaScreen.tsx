@@ -4,6 +4,7 @@ import { useLottery } from '../hooks/useContext';
 import Ball from '../components/Ball';
 import { theme, styles } from '../theme';
 import { LotteryResult } from '../types/ILottery';
+import { StatusBar } from 'expo-status-bar';
 
 const MegaSenaScreen: React.FC = () => {
   const { results, loading, error } = useLottery();
@@ -24,6 +25,7 @@ const MegaSenaScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" backgroundColor={theme.colors.background} />
       <Text style={styles.title}>MEGA-SENA</Text>
       <View style={styles.ballContainer}>
       {megaSenaResults?.dezenas.map((dezena: number) => (

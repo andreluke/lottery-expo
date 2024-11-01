@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 export const theme = {
   colors: {
     background: "#ffffff",
+    menuBackground: '#f4fcff',
     text: "#333333",
     megaSena: {
       background: "#209869",
@@ -29,6 +30,7 @@ export const theme = {
     medium: 8,
     large: 16,
   },
+  button: '#2d74da'
 };
 
 export const styles = StyleSheet.create({
@@ -70,20 +72,20 @@ export const style = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f4fcff',
+    backgroundColor: theme.colors.menuBackground,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#333',
+    color: theme.colors.text,
   },
   buttonText: {
-    color: '#fff',
+    color: theme.colors.background,
     fontSize: 16,
 },
 button: {
-  backgroundColor: '#2d74da',
+  backgroundColor: theme.button,
   paddingVertical: 10,
   borderRadius: 35,
   alignItems: 'center',
