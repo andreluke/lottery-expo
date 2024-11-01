@@ -1,4 +1,6 @@
 import 'react-native-gesture-handler/jestSetup';
+import "@react-navigation/native-stack"
+import 'setimmediate';
 
 // Para ignorar o erro durante os testes
 jest.mock('react-native-gesture-handler', () => {
@@ -10,6 +12,17 @@ jest.mock('react-native-gesture-handler', () => {
     default: {
       ...ActualGestureHandler.default,
       install: jest.fn(),
+    },
+  };
+});
+
+jest.mock('@react-navigation/native-stack', () => {
+  return {
+    createNativeStackNavigator: () => {
+      return {
+        Navigator: ({ children }) => <>{children}</>,
+        Screen: () => null,
+      };
     },
   };
 });

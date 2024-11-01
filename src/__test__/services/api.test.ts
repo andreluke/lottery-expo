@@ -4,7 +4,7 @@ jest.mock('../../services/api', () => ({
     fetchLatestResults: jest.fn(),
 }));
 
-describe('fetchLatestResults', () => {
+describe('Service fetchLatestResults', () => {
 
   beforeEach(() => {
     jest.clearAllMocks(); // Limpa os mocks antes de cada teste

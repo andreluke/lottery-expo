@@ -64,3 +64,29 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+export const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f4fcff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+},
+button: {
+  backgroundColor: '#2d74da',
+  paddingVertical: 10,
+  borderRadius: 35,
+  alignItems: 'center',
+  width: '40%',
+},
+});
