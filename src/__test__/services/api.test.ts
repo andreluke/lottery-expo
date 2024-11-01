@@ -1,98 +1,66 @@
-import { fetchLatestResults } from '../../services/api'; // ajuste o caminho conforme necessário
+import { createApiService } from '../../services/api';
 
-jest.mock('../../services/api', () => ({
-    fetchLatestResults: jest.fn(),
-}));
-
-describe('Service fetchLatestResults', () => {
+describe('API Service', () => {
+  let mockHttpClient: any;
+  let apiService: ReturnType<typeof createApiService>;
 
   beforeEach(() => {
-    jest.clearAllMocks(); // Limpa os mocks antes de cada teste
-  });
-
-  it('deve buscar os últimos resultados com sucesso e verificar a estrutura', async () => {
-    // Mock da resposta da API com dados fictícios atualizados
-    const mockResponse = {
-      megasena: {
-        acumulado: false,
-        concurso: 1234,
-        dataApuracao: '29/10/2024',
-        dezenas: ["07", "12", "23", "34", "45", "56"], // Ajustado para strings
-        valorPremio: 1000000,
-        concursoEspecial: false,
-        dataPorExtenso: "Terça-feira, 29 de Outubro de 2024",
-        dataProximoConcurso: "31/10/2024",
-      },
-      quina: {
-        acumulado: false,
-        concurso: 5678,
-        dataApuracao: '29/10/2024',
-        dezenas: ["08", "13", "22", "45", "56"], // Ajustado para strings
-        valorPremio: 200000,
-        concursoEspecial: false,
-        dataPorExtenso: "Terça-feira, 29 de Outubro de 2024",
-        dataProximoConcurso: "31/10/2024",
-      },
-      timemania: {
-        acumulado: false,
-        concurso: 91011,
-        dataApuracao: '29/10/2024',
-        dezenas: ["01", "02", "03", "04", "05", "06", "07"], // Ajustado para strings
-        valorPremio: 300000,
-        concursoEspecial: false,
-        dataPorExtenso: "Terça-feira, 29 de Outubro de 2024",
-        dataProximoConcurso: "31/10/2024",
-      },
-      duplasena: {
-        acumulado: true,
-        concurso: 1213,
-        dataApuracao: '30/10/2024',
-        dezenas: ["01", "02", "03", "04", "05", "06"], // Ajustado para strings
-        valorPremio: 400000,
-        concursoEspecial: false,
-        dataPorExtenso: "Quarta-feira, 30 de Outubro de 2024",
-        dataProximoConcurso: "01/11/2024",
-      },
-      diaDeSorte: {
-        acumulado: false,
-        concurso: 1415,
-        dataApuracao: '29/10/2024',
-        dezenas: ["04", "05", "13", "16", "23", "25", "28"], // Ajustado para strings
-        mesDaSorte: 'Abril',
-        valorPremio: 500000,
-        concursoEspecial: false,
-        dataPorExtenso: "Terça-feira, 29 de Outubro de 2024",
-        dataProximoConcurso: "31/10/2024",
-        numeroDoConcurso: 982,
-        quantidadeGanhadores: 1,
-        tipoJogo: "DIA_DE_SORTE",
-        tipoPublicacao: 3,
-        valorEstimadoProximoConcurso: 150000,
-      },
+    // Mock do httpClient para simular chamadas de API
+    mockHttpClient = {
+      get: jest.fn()
     };
-
-    // Mocka a função fetchLatestResults para retornar a resposta fictícia
-    (fetchLatestResults as jest.Mock).mockResolvedValue(mockResponse);
-
-    // Chama a função e verifica a resposta
-    const results = await fetchLatestResults();
-
-    // Verifica se o retorno da função é igual ao mock
-    expect(results).toEqual(mockResponse);
-
-    // Verifica se as propriedades esperadas estão presentes
-    expect(results).toHaveProperty('megasena');
-    expect(results).toHaveProperty('quina');
-    expect(results).toHaveProperty('timemania');
-    expect(results).toHaveProperty('duplasena');
-    expect(results).toHaveProperty('diaDeSorte');
+    // Criar a instância do serviço com o mock
+    apiService = createApiService(mockHttpClient);
   });
 
-  it('deve tratar erros na busca dos últimos resultados', async () => {
-    // Mocka a função fetchLatestResults para retornar um erro
-    (fetchLatestResults as jest.Mock).mockRejectedValue(new Error('Erro na API'));
+  test('Deve retornar dados quando feito com sucesso', async () => {
+    const mockResponseData = { key: 'value' };
+    mockHttpClient.get.mockResolvedValue({ data: mockResponseData });
 
-    // Chama a função e verifica se lança um erro
-    await expect(fetchLatestResults()).rejects.toThrowError('Erro na API');
+    const result = await apiService.fetchLatestResults();
+
+    expect(result).toEqual(mockResponseData);
+    expect(mockHttpClient.get).toHaveBeenCalledWith('/home/ultimos-resultados');
+  });
+
+  test('Deve retornar um erro quando falhar', async () => {
+    const mockError = new Error('Network error');
+    mockHttpClient.get.mockRejectedValue(mockError);
+
+    await expect(apiService.fetchLatestResults()).rejects.toThrow('Network error');
+    expect(mockHttpClient.get).toHaveBeenCalledWith('/home/ultimos-resultados');
+  });
+
+  test('Deve retornar corretamente dados vazios', async () => {
+    mockHttpClient.get.mockResolvedValue({ data: null });
+
+    const result = await apiService.fetchLatestResults();
+
+    expect(result).toBeNull();
+    expect(mockHttpClient.get).toHaveBeenCalledWith('/home/ultimos-resultados');
+  });
+
+  test('Deve lidar com status HTTP que não sejam 200', async () => {
+    const mockResponse = {
+      status: 500,
+      data: { error: 'Internal Server Error' }
+    };
+    mockHttpClient.get.mockResolvedValue(mockResponse);
+
+    // Verifica se o serviço lida com erros de status HTTP adequadamente
+    const result = await apiService.fetchLatestResults();
+
+    expect(result).toEqual(mockResponse.data);
+    expect(mockHttpClient.get).toHaveBeenCalledWith('/home/ultimos-resultados');
+  });
+
+  test('Deve não alterar dados já definidos', async () => {
+    const mockResponseData = { results: [1, 2, 3], timestamp: '2024-11-01' };
+    mockHttpClient.get.mockResolvedValue({ data: mockResponseData });
+
+    const result = await apiService.fetchLatestResults();
+
+    expect(result).toEqual(mockResponseData);
+    expect(mockHttpClient.get).toHaveBeenCalledWith('/home/ultimos-resultados');
   });
 });

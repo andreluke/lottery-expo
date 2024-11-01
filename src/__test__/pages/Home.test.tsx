@@ -1,6 +1,7 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import Home from "../../pages/Home";
+import { useNavigation } from "@react-navigation/native";
 
 const mockNavigate = jest.fn();
 
@@ -8,10 +9,7 @@ jest.mock("@react-navigation/native", () => ({
   useNavigation: jest.fn(),
 }));
 
-
-
 describe("Home", () => {
-
 
   beforeEach(() => {
     const useNavigation = require("@react-navigation/native").useNavigation;
@@ -44,5 +42,22 @@ describe("Home", () => {
 
     // Verifica se a navegação foi chamada
     expect(mockNavigate).toHaveBeenCalledWith("Main");
+  });
+
+  it("Deve navegar para 'Main' após 10 segundos", () => {
+    const navigateMock = jest.fn();
+    (useNavigation as jest.Mock).mockReturnValue({ navigate: navigateMock });
+
+    jest.useFakeTimers();
+
+    const { getByText } = render(<Home />);
+
+    expect(getByText("Bem-vindo ao App!")).toBeTruthy();
+
+    jest.advanceTimersByTime(10000);
+
+    expect(navigateMock).toHaveBeenCalledWith("Main");
+
+    jest.useRealTimers();
   });
 });
