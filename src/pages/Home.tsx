@@ -10,7 +10,7 @@ type SplashScreenNavigationProp = StackNavigationProp<
   "Home"
 >;
 
-export default function SplashScreen() {
+const Home: React.FC = () => {
   const navigation = useNavigation<SplashScreenNavigationProp>();
 
   useEffect(() => {
@@ -27,3 +27,5 @@ export default function SplashScreen() {
     </View>
   );
 }
+
+export default Home
