@@ -31,7 +31,7 @@ describe("Home", () => {
     const { getByText } = render(<Home />);
 
     expect(getByText("Bem-vindo ao App!")).toBeTruthy();
-    expect(getByText("Iniciar")).toBeTruthy();
+    expect(getByText("Iniciar")).toBeTruthy();  
   });
 
   it("Deve navegar para 'Main' ao pressionar o botão 'Iniciar'", () => {

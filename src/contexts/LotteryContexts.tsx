@@ -22,9 +22,7 @@ export const LotteryProvider: React.FC<LotteryProviderProps> = ({ children }) =>
   useEffect(() => {
     const loadResults = async () => {
         try {
-          
             const data = await fetchLatestResults();
-            console.log("Tô rodando")
             setResults(data);
         } catch (err) {
             setError('Erro ao carregar resultados'); // Define o erro no estado
