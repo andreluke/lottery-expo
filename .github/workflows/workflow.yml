@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - teste-unitario  # ou a branch que você desejar
+      - main
+      - teste-e2e
   pull_request:
     branches:
       - main  # ou a branch que você desejar
