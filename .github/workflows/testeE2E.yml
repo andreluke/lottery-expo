@@ -1,0 +1,39 @@
+name: Detox E2E Tests
+
+on:
+  push:
+    branches:
+      - main  # Ou a branch que você deseja monitorar
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up Android emulator
+        run: |
+          echo "y" | sdkmanager --sdk_root=$ANDROID_HOME --install "system-images;android-30;google_apis;x86"  # Instala a imagem do sistema se não estiver instalada
+          echo "no" | avdmanager create avd --force --name "Simulator" --package "system-images;android-30;google_apis;x86" --device "Nexus 5" --tag "google_apis"
+          nohup emulator -avd test_avd -no-window -no-audio -gpu swiftshader_indirect &  # Inicia o emulador
+          adb wait-for-device  # Espera até que o emulador esteja pronto
+          adb shell input keyevent 82  # Desbloqueia o emulador
+
+      - name: Build Android app
+        run: npm run build:e2e
+
+      - name: Run Detox tests on Android
+        run: npm run test:e2e

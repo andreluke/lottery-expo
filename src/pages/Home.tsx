@@ -12,7 +12,8 @@ const Home: React.FC = () => {
   const navigation = useNavigation<SplashScreenNavigationProp>();
 
   useEffect(() => {
-    const timer = setTimeout(() => navigation.navigate("Main"), 10000);
+    const timer = setTimeout(() => {console.log('Navegando para Main'); navigation.navigate("Main")}, 10000);
+    
     return () => clearTimeout(timer);
   }, [navigation]);
 
