@@ -3,7 +3,7 @@ name: Detox E2E Tests
 on:
   push:
     branches:
-      - main  # Ou a branch que você deseja monitorar
+      - teste-e2e  # Ou a branch que você deseja monitorar
   pull_request:
     branches:
       - main
